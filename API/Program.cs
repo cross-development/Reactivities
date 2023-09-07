@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Application.Activities;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,12 +16,17 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policy => 
+    options.AddPolicy("CorsPolicy", policy =>
     {
         policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
     });
+});
+
+builder.Services.AddMediatR(config =>
+{
+    config.RegisterServicesFromAssembly(typeof(List.Handler).Assembly);
 });
 
 var app = builder.Build();
