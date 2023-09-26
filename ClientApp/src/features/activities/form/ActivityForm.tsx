@@ -3,12 +3,15 @@ import { Button, Form, Segment } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
 
 interface Props {
+  isSubmitting: boolean;
   selectedActivity?: Activity;
   onCloseForm: () => void;
   onCreateOrEditActivity: (activity: Activity) => void;
 }
 
-const ActivityForm: FC<Props> = memo(({ selectedActivity, onCloseForm, onCreateOrEditActivity }) => {
+const ActivityForm: FC<Props> = memo(props => {
+  const { isSubmitting, selectedActivity, onCloseForm, onCreateOrEditActivity } = props;
+
   const initialState = selectedActivity ?? {
     id: '',
     title: '',
@@ -58,6 +61,7 @@ const ActivityForm: FC<Props> = memo(({ selectedActivity, onCloseForm, onCreateO
 
         <Form.Input
           name="date"
+          type="date"
           placeholder="Date"
           value={activity.date}
           onChange={handleInputChange}
@@ -82,6 +86,7 @@ const ActivityForm: FC<Props> = memo(({ selectedActivity, onCloseForm, onCreateO
           type="submit"
           floated="right"
           content="Submit"
+          loading={isSubmitting}
         />
 
         <Button

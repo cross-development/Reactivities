@@ -9,6 +9,7 @@ interface Props {
   activities: Activity[];
   selectedActivity?: Activity;
   isEditMode: boolean;
+  isSubmitting: boolean;
   onOpenForm: (id: string) => void;
   onCloseForm: () => void;
   onSelectActivity: (id: string) => void;
@@ -21,6 +22,7 @@ const ActivityDashboard: FC<Props> = memo(props => {
   const {
     activities,
     isEditMode,
+    isSubmitting,
     selectedActivity,
     onOpenForm,
     onCloseForm,
@@ -35,6 +37,7 @@ const ActivityDashboard: FC<Props> = memo(props => {
       <Grid.Column width="10">
         <ActivityList
           activities={activities}
+          isSubmitting={isSubmitting}
           onSelectActivity={onSelectActivity}
           onDeleteActivity={onDeleteActivity}
         />
@@ -51,6 +54,7 @@ const ActivityDashboard: FC<Props> = memo(props => {
 
         {isEditMode && (
           <ActivityForm
+            isSubmitting={isSubmitting}
             selectedActivity={selectedActivity}
             onCloseForm={onCloseForm}
             onCreateOrEditActivity={onCreateOrEditActivity}

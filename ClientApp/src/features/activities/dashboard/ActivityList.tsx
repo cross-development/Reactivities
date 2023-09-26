@@ -1,14 +1,25 @@
-import { FC, memo } from 'react';
+import { FC, MouseEvent, memo, useState } from 'react';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
 
 interface Props {
+  isSubmitting: boolean;
   activities: Activity[];
   onSelectActivity: (id: string) => void;
   onDeleteActivity: (id: string) => void;
 }
 
-const ActivityList: FC<Props> = memo(({ activities, onSelectActivity, onDeleteActivity }) => {
+const ActivityList: FC<Props> = memo(props => {
+  const { isSubmitting, activities, onSelectActivity, onDeleteActivity } = props;
+
+  const [target, setTarget] = useState<string>('');
+
+  const handleActivityDelete = (e: MouseEvent<HTMLButtonElement>, id: string): void => {
+    setTarget(e.currentTarget.name);
+
+    onDeleteActivity(id);
+  };
+
   return (
     <Segment>
       <Item.Group divided>
@@ -35,10 +46,12 @@ const ActivityList: FC<Props> = memo(({ activities, onSelectActivity, onDeleteAc
                 />
 
                 <Button
+                  name={id}
                   floated="right"
                   content="Delete"
                   color="red"
-                  onClick={() => onDeleteActivity(id)}
+                  loading={isSubmitting && target === id}
+                  onClick={e => handleActivityDelete(e, id)}
                 />
 
                 <Label
