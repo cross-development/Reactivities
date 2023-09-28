@@ -1,27 +1,25 @@
 import { FC, memo, useCallback, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Container } from 'semantic-ui-react';
 import { v4 as uuid } from 'uuid';
 import NavBar from './NavBar';
 import Loader from './Loader';
 import { Activity } from '../models/activity';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
+import { useStore } from '../stores/store';
 import agent from '../api/agent';
 
 const App: FC = memo(() => {
-  const [isLoading, setIsLoading] = useState(true);
+  const { activityStore } = useStore();
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<Activity>();
 
   useEffect(() => {
-    agent.Activities.list().then(data => {
-      const activities: Activity[] = data.map(a => ({ ...a, date: a.date.split('T')[0] }));
-
-      setActivities(activities);
-      setIsLoading(false);
-    });
-  }, []);
+    activityStore.loadActivities();
+  }, [activityStore]);
 
   const handleSelectActivity = useCallback(
     (id: string): void => setSelectedActivity(activities.find(a => a.id === id)),
@@ -70,7 +68,7 @@ const App: FC = memo(() => {
     setIsSubmitting(false);
   }, []);
 
-  if (isLoading) {
+  if (activityStore.isInitialLoading) {
     return <Loader content="Loading App" />;
   }
 
@@ -80,7 +78,7 @@ const App: FC = memo(() => {
 
       <Container style={{ marginTop: '6rem' }}>
         <ActivityDashboard
-          activities={activities}
+          activities={activityStore.activities}
           isEditMode={isEditMode}
           isSubmitting={isSubmitting}
           selectedActivity={selectedActivity}
@@ -98,4 +96,4 @@ const App: FC = memo(() => {
 
 App.displayName = 'App';
 
-export default App;
+export default observer(App);
