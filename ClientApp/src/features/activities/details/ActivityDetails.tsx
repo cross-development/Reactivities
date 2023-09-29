@@ -1,26 +1,28 @@
 import { FC, memo } from 'react';
 import { Button, Card, Image } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-  activity: Activity;
-  onOpenForm: (id: string) => void;
-  onCancelSelectActivity: () => void;
-}
+const ActivityDetails: FC = memo(() => {
+  const {
+    activityStore: { selectedActivity, openForm, cancelSelectedActivity },
+  } = useStore();
 
-const ActivityDetails: FC<Props> = memo(({ activity, onOpenForm, onCancelSelectActivity }) => {
+  if (!selectedActivity) {
+    return null;
+  }
+
   return (
     <Card fluid>
-      <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
+      <Image src={`/assets/categoryImages/${selectedActivity.category}.jpg`} />
 
       <Card.Content>
-        <Card.Header>{activity.title}</Card.Header>
+        <Card.Header>{selectedActivity.title}</Card.Header>
 
         <Card.Meta>
-          <span>{activity.date}</span>
+          <span>{selectedActivity.date}</span>
         </Card.Meta>
 
-        <Card.Description>{activity.description}</Card.Description>
+        <Card.Description>{selectedActivity.description}</Card.Description>
       </Card.Content>
 
       <Card.Content extra>
@@ -29,13 +31,13 @@ const ActivityDetails: FC<Props> = memo(({ activity, onOpenForm, onCancelSelectA
             basic
             color="blue"
             content="Edit"
-            onClick={() => onOpenForm(activity.id)}
+            onClick={() => openForm(selectedActivity.id)}
           />
           <Button
             basic
             color="grey"
             content="Cancel"
-            onClick={onCancelSelectActivity}
+            onClick={cancelSelectedActivity}
           />
         </Button.Group>
       </Card.Content>

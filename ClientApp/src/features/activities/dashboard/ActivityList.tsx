@@ -1,29 +1,25 @@
-import { FC, MouseEvent, memo, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-  isSubmitting: boolean;
-  activities: Activity[];
-  onSelectActivity: (id: string) => void;
-  onDeleteActivity: (id: string) => void;
-}
-
-const ActivityList: FC<Props> = memo(props => {
-  const { isSubmitting, activities, onSelectActivity, onDeleteActivity } = props;
-
+const ActivityList: FC = observer(() => {
   const [target, setTarget] = useState<string>('');
+
+  const { activityStore } = useStore();
+
+  const { deleteActivity, selectActivity, activitiesByDate, isLoading } = activityStore;
 
   const handleActivityDelete = (e: MouseEvent<HTMLButtonElement>, id: string): void => {
     setTarget(e.currentTarget.name);
 
-    onDeleteActivity(id);
+    deleteActivity(id);
   };
 
   return (
     <Segment>
       <Item.Group divided>
-        {activities.map(({ id, category, city, date, description, title, venue }) => (
+        {activitiesByDate.map(({ id, category, city, date, description, title, venue }) => (
           <Item key={id}>
             <Item.Content>
               <Item.Header as="a">{title}</Item.Header>
@@ -42,7 +38,7 @@ const ActivityList: FC<Props> = memo(props => {
                   floated="right"
                   content="View"
                   color="blue"
-                  onClick={() => onSelectActivity(id)}
+                  onClick={() => selectActivity(id)}
                 />
 
                 <Button
@@ -50,7 +46,7 @@ const ActivityList: FC<Props> = memo(props => {
                   floated="right"
                   content="Delete"
                   color="red"
-                  loading={isSubmitting && target === id}
+                  loading={isLoading && target === id}
                   onClick={e => handleActivityDelete(e, id)}
                 />
 

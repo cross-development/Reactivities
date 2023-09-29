@@ -1,16 +1,13 @@
-import { FC, useState, ChangeEvent, memo } from 'react';
+import { FC, useState, ChangeEvent } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Button, Form, Segment } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-  isSubmitting: boolean;
-  selectedActivity?: Activity;
-  onCloseForm: () => void;
-  onCreateOrEditActivity: (activity: Activity) => void;
-}
+const ActivityForm: FC = () => {
+  const { activityStore } = useStore();
 
-const ActivityForm: FC<Props> = memo(props => {
-  const { isSubmitting, selectedActivity, onCloseForm, onCreateOrEditActivity } = props;
+  const { selectedActivity, closeForm, createActivity, updateActivity, isLoading } = activityStore;
 
   const initialState = selectedActivity ?? {
     id: '',
@@ -30,7 +27,9 @@ const ActivityForm: FC<Props> = memo(props => {
     setActivity(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (): void => onCreateOrEditActivity(activity);
+  const handleSubmit = (): void => {
+    activity.id ? updateActivity(activity) : createActivity(activity);
+  };
 
   return (
     <Segment clearing>
@@ -86,20 +85,20 @@ const ActivityForm: FC<Props> = memo(props => {
           type="submit"
           floated="right"
           content="Submit"
-          loading={isSubmitting}
+          loading={isLoading}
         />
 
         <Button
           type="button"
           floated="right"
           content="Cancel"
-          onClick={onCloseForm}
+          onClick={closeForm}
         />
       </Form>
     </Segment>
   );
-});
+};
 
 ActivityForm.displayName = 'ActivityForm';
 
-export default ActivityForm;
+export default observer(ActivityForm);
