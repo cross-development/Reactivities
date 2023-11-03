@@ -1,4 +1,5 @@
 import { FC, MouseEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
@@ -8,7 +9,7 @@ const ActivityList: FC = observer(() => {
 
   const { activityStore } = useStore();
 
-  const { deleteActivity, selectActivity, activitiesByDate, isLoading } = activityStore;
+  const { deleteActivity, activitiesByDate, isLoading } = activityStore;
 
   const handleActivityDelete = (e: MouseEvent<HTMLButtonElement>, id: string): void => {
     setTarget(e.currentTarget.name);
@@ -38,7 +39,8 @@ const ActivityList: FC = observer(() => {
                   floated="right"
                   content="View"
                   color="blue"
-                  onClick={() => selectActivity(id)}
+                  to={`/activities/${id}`}
+                  as={Link}
                 />
 
                 <Button

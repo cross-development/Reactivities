@@ -1,40 +1,43 @@
 import { FC, memo } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { Button, Container, Menu } from 'semantic-ui-react';
-import { useStore } from '../stores/store';
 
-const NavBar: FC = memo(() => {
-  const { activityStore } = useStore();
+const NavBar: FC = memo(() => (
+  <Menu
+    inverted
+    fixed="top"
+  >
+    <Container>
+      <Menu.Item
+        header
+        to="/"
+        as={Link}
+      >
+        <img
+          alt="logo"
+          src="/assets/logo.png"
+          style={{ marginRight: '.625rem' }}
+        />
+        Reactivities
+      </Menu.Item>
 
-  const handleOpenForm = (): void => activityStore.openForm();
+      <Menu.Item
+        to="/activities"
+        name="Activities"
+        as={NavLink}
+      />
 
-  return (
-    <Menu
-      inverted
-      fixed="top"
-    >
-      <Container>
-        <Menu.Item header>
-          <img
-            alt="logo"
-            src="/assets/logo.png"
-            style={{ marginRight: '.625rem' }}
-          />
-          Reactivities
-        </Menu.Item>
-
-        <Menu.Item name="Activities" />
-
-        <Menu.Item>
-          <Button
-            positive
-            content="Create Activity"
-            onClick={handleOpenForm}
-          />
-        </Menu.Item>
-      </Container>
-    </Menu>
-  );
-});
+      <Menu.Item>
+        <Button
+          positive
+          content="Create Activity"
+          to="/create-activity"
+          as={NavLink}
+        />
+      </Menu.Item>
+    </Container>
+  </Menu>
+));
 
 NavBar.displayName = 'NavBar';
 
