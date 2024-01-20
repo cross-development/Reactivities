@@ -7,7 +7,7 @@ import { useStore } from '../../../app/stores/store';
 const ActivityForm: FC = () => {
   const { activityStore } = useStore();
 
-  const { selectedActivity, closeForm, createActivity, updateActivity, isLoading } = activityStore;
+  const { selectedActivity, createActivity, updateActivity, isLoading } = activityStore;
 
   const initialState = selectedActivity ?? {
     id: '',
@@ -92,7 +92,6 @@ const ActivityForm: FC = () => {
           type="button"
           floated="right"
           content="Cancel"
-          onClick={closeForm}
         />
       </Form>
     </Segment>

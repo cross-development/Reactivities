@@ -4,7 +4,7 @@ import { useStore } from '../../../app/stores/store';
 
 const ActivityDetails: FC = memo(() => {
   const {
-    activityStore: { selectedActivity, openForm, cancelSelectedActivity },
+    activityStore: { selectedActivity },
   } = useStore();
 
   if (!selectedActivity) {
@@ -31,13 +31,11 @@ const ActivityDetails: FC = memo(() => {
             basic
             color="blue"
             content="Edit"
-            onClick={() => openForm(selectedActivity.id)}
           />
           <Button
             basic
             color="grey"
             content="Cancel"
-            onClick={cancelSelectedActivity}
           />
         </Button.Group>
       </Card.Content>

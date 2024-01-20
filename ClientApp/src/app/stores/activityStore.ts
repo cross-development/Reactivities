@@ -14,17 +14,15 @@ class ActivityStore {
     makeAutoObservable(this);
   }
 
-  get activitiesByDate() {
+  get activitiesByDate(): Activity[] {
     return Array.from(this.activityRegistry.values()).sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
   }
 
-  loadActivities = async (): Promise<void> => {
+  public loadActivities = async (): Promise<void> => {
     try {
       const activities = await agent.Activities.list();
 
-      activities.forEach(activity => {
-        this.activityRegistry.set(activity.id, { ...activity, date: activity.date.split('T')[0] });
-      });
+      activities.forEach(this.setActivity);
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -34,25 +32,37 @@ class ActivityStore {
     }
   };
 
-  selectActivity = (id: string): void => {
-    this.selectedActivity = this.activityRegistry.get(id);
+  public loadActivity = async (id: string): Promise<void> => {
+    let activity = this.getActivity(id);
+
+    if (activity) {
+      this.selectedActivity = activity;
+    } else {
+      this.isInitialLoading = true;
+
+      try {
+        activity = await agent.Activities.details(id);
+
+        this.setActivity(activity);
+      } catch (error) {
+        console.log('error', error);
+      } finally {
+        runInAction(() => {
+          this.isInitialLoading = false;
+        });
+      }
+    }
   };
 
-  cancelSelectedActivity = (): void => {
-    this.selectedActivity = undefined;
+  private setActivity = (activity: Activity): void => {
+    this.activityRegistry.set(activity.id, { ...activity, date: activity.date.split('T')[0] });
   };
 
-  openForm = (id?: string): void => {
-    id ? this.selectActivity(id) : this.cancelSelectedActivity();
-
-    this.isEditMode = true;
+  private getActivity = (id: string): Activity | undefined => {
+    return this.activityRegistry.get(id);
   };
 
-  closeForm = (): void => {
-    this.isEditMode = false;
-  };
-
-  createActivity = async (activity: Activity): Promise<void> => {
+  public createActivity = async (activity: Activity): Promise<void> => {
     this.isLoading = true;
 
     activity.id = uuid();
@@ -74,7 +84,7 @@ class ActivityStore {
     }
   };
 
-  updateActivity = async (activity: Activity): Promise<void> => {
+  public updateActivity = async (activity: Activity): Promise<void> => {
     this.isLoading = true;
 
     try {
@@ -94,7 +104,7 @@ class ActivityStore {
     }
   };
 
-  deleteActivity = async (id: string): Promise<void> => {
+  public deleteActivity = async (id: string): Promise<void> => {
     this.isLoading = true;
 
     try {
@@ -102,10 +112,6 @@ class ActivityStore {
 
       runInAction(() => {
         this.activityRegistry.delete(id);
-
-        if (this.selectedActivity?.id == id) {
-          this.cancelSelectedActivity();
-        }
       });
     } catch (error) {
       console.log('error', error);
