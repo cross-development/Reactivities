@@ -1,14 +1,26 @@
-import { FC, memo } from 'react';
+import { FC, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
+import { Link, useParams } from 'react-router-dom';
 import { Button, Card, Image } from 'semantic-ui-react';
-import { useStore } from '../../../app/stores/store';
 
-const ActivityDetails: FC = memo(() => {
+import { useStore } from '../../../app/stores/store';
+import Loader from '../../../app/layout/Loader';
+
+const ActivityDetails: FC = () => {
   const {
-    activityStore: { selectedActivity },
+    activityStore: { selectedActivity, isInitialLoading, loadActivity },
   } = useStore();
 
-  if (!selectedActivity) {
-    return null;
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      loadActivity(id);
+    }
+  }, [id, loadActivity]);
+
+  if (isInitialLoading || !selectedActivity) {
+    return <Loader />;
   }
 
   return (
@@ -31,18 +43,22 @@ const ActivityDetails: FC = memo(() => {
             basic
             color="blue"
             content="Edit"
+            to={`/manage/${selectedActivity.id}`}
+            as={Link}
           />
           <Button
             basic
             color="grey"
             content="Cancel"
+            to="activities"
+            as={Link}
           />
         </Button.Group>
       </Card.Content>
     </Card>
   );
-});
+};
 
 ActivityDetails.displayName = 'ActivityDetails';
 
-export default ActivityDetails;
+export default observer(ActivityDetails);

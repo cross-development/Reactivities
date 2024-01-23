@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { v4 as uuid } from 'uuid';
+
 import { Activity } from '../models/activity';
 import agent from '../api/agent';
 
@@ -8,17 +9,21 @@ class ActivityStore {
   selectedActivity: Activity | undefined = undefined;
   isEditMode = false;
   isLoading = false;
-  isInitialLoading = true;
+  isInitialLoading = false;
 
   constructor() {
     makeAutoObservable(this);
   }
 
   get activitiesByDate(): Activity[] {
-    return Array.from(this.activityRegistry.values()).sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    return Array.from(this.activityRegistry.values()).sort(
+      (a, b) => Date.parse(a.date) - Date.parse(b.date),
+    );
   }
 
   public loadActivities = async (): Promise<void> => {
+    this.isInitialLoading = true;
+
     try {
       const activities = await agent.Activities.list();
 
@@ -32,11 +37,12 @@ class ActivityStore {
     }
   };
 
-  public loadActivity = async (id: string): Promise<void> => {
+  public loadActivity = async (id: string): Promise<Activity | undefined> => {
     let activity = this.getActivity(id);
 
     if (activity) {
       this.selectedActivity = activity;
+      return activity;
     } else {
       this.isInitialLoading = true;
 
@@ -44,6 +50,12 @@ class ActivityStore {
         activity = await agent.Activities.details(id);
 
         this.setActivity(activity);
+
+        runInAction(() => {
+          this.selectedActivity = activity;
+        });
+
+        return activity;
       } catch (error) {
         console.log('error', error);
       } finally {
@@ -55,7 +67,10 @@ class ActivityStore {
   };
 
   private setActivity = (activity: Activity): void => {
-    this.activityRegistry.set(activity.id, { ...activity, date: activity.date.split('T')[0] });
+    this.activityRegistry.set(activity.id, {
+      ...activity,
+      date: activity.date.split('T')[0],
+    });
   };
 
   private getActivity = (id: string): Activity | undefined => {

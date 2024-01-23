@@ -1,15 +1,15 @@
-import { FC, useState, ChangeEvent } from 'react';
+import { FC, useState, ChangeEvent, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Form, Segment } from 'semantic-ui-react';
+import { v4 as uuid } from 'uuid';
+
 import { Activity } from '../../../app/models/activity';
 import { useStore } from '../../../app/stores/store';
+import Loader from '../../../app/layout/Loader';
 
 const ActivityForm: FC = () => {
-  const { activityStore } = useStore();
-
-  const { selectedActivity, createActivity, updateActivity, isLoading } = activityStore;
-
-  const initialState = selectedActivity ?? {
+  const [activity, setActivity] = useState<Activity>({
     id: '',
     title: '',
     category: '',
@@ -17,9 +17,21 @@ const ActivityForm: FC = () => {
     date: '',
     city: '',
     venue: '',
-  };
+  });
 
-  const [activity, setActivity] = useState<Activity>(initialState);
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+
+  const {
+    activityStore: { isLoading, isInitialLoading, loadActivity, updateActivity, createActivity },
+  } = useStore();
+
+  useEffect(() => {
+    if (id) {
+      loadActivity(id).then(activity => setActivity(activity!));
+    }
+  }, [id, loadActivity]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const { name, value } = e.target;
@@ -27,9 +39,20 @@ const ActivityForm: FC = () => {
     setActivity(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (): void => {
-    activity.id ? updateActivity(activity) : createActivity(activity);
+  const handleSubmit = async (): Promise<void> => {
+    if (!activity.id) {
+      activity.id = uuid();
+      await createActivity(activity);
+    } else {
+      await updateActivity(activity);
+    }
+
+    navigate(`/activities/${activity.id}`);
   };
+
+  if (isInitialLoading) {
+    return <Loader content="Loading activity..." />;
+  }
 
   return (
     <Segment clearing>
@@ -92,6 +115,8 @@ const ActivityForm: FC = () => {
           type="button"
           floated="right"
           content="Cancel"
+          to="/activities"
+          as={Link}
         />
       </Form>
     </Segment>

@@ -1,11 +1,17 @@
 import { FC } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Container } from 'semantic-ui-react';
+
+import HomePage from '../../features/home/HomePage';
 import NavBar from './NavBar';
 
 const App: FC = observer(() => {
-  return (
+  const location = useLocation();
+
+  return location.pathname === '/' ? (
+    <HomePage />
+  ) : (
     <>
       <NavBar />
 
