@@ -1,8 +1,9 @@
 import { FC, useEffect } from 'react';
-import { Grid } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
+import { Grid } from 'semantic-ui-react';
 
 import ActivityList from './ActivityList';
+import ActivityFilters from './ActivityFilters';
 import Loader from '../../../app/layout/Loader';
 import { useStore } from '../../../app/stores/store';
 
@@ -28,7 +29,7 @@ const ActivityDashboard: FC = observer(() => {
       </Grid.Column>
 
       <Grid.Column width="6">
-        <h2>Activity filters</h2>
+        <ActivityFilters />
       </Grid.Column>
     </Grid>
   );
