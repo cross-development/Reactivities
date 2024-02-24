@@ -1,11 +1,10 @@
-using API.Extensions;
 using Microsoft.EntityFrameworkCore;
+using API.Extensions;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 
