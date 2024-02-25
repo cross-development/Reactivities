@@ -27,6 +27,12 @@ const NavBar: FC = memo(() => (
         as={NavLink}
       />
 
+      <Menu.Item
+        to="/errors"
+        name="Errors"
+        as={NavLink}
+      />
+
       <Menu.Item>
         <Button
           positive

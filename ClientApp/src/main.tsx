@@ -6,6 +6,7 @@ import { StoreContext, store } from './app/stores/store.ts';
 import { router } from './app/router/Routes.tsx';
 import 'semantic-ui-css/semantic.min.css';
 import 'react-calendar/dist/Calendar.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 import './app/layout/styles.css';
 
 const rootElement: HTMLElement = document.getElementById('root')!;
