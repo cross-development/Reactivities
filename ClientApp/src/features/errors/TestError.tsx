@@ -1,9 +1,13 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import axios from 'axios';
 import { Button, Header, Segment } from 'semantic-ui-react';
 
+import ValidationError from './ValidationError';
+
 const TestError = memo(() => {
   const baseUrl = 'http://localhost:5000/api/';
+
+  const [errors, setErrors] = useState(null);
 
   const handleNotFound = () => {
     axios.get(baseUrl + 'buggy/not-found').catch(err => console.log(err.response));
@@ -26,7 +30,7 @@ const TestError = memo(() => {
   };
 
   const handleValidationError = () => {
-    axios.post(baseUrl + 'activities', {}).catch(err => console.log(err.response));
+    axios.post(baseUrl + 'activities', {}).catch(err => setErrors(err));
   };
 
   return (
@@ -81,6 +85,8 @@ const TestError = memo(() => {
           />
         </Button.Group>
       </Segment>
+
+      {errors && <ValidationError errors={errors} />}
     </>
   );
 });
