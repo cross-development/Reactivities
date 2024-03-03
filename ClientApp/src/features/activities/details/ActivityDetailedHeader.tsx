@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 import { Header, Segment, Image, Item, Button } from 'semantic-ui-react';
+import { format } from 'date-fns';
 
 import { Activity } from '../../../app/models/activity';
 
@@ -41,7 +43,7 @@ const ActivityDetailedHeader: FC<Props> = observer(({ activity }) => (
                 style={{ color: 'white' }}
               />
 
-              <p>{activity.date}</p>
+              <p>{format(activity.date!, 'dd MMM yyyy')}</p>
               <p>
                 Hosted by <strong>Bob</strong>
               </p>
@@ -62,6 +64,8 @@ const ActivityDetailedHeader: FC<Props> = observer(({ activity }) => (
       <Button
         color="orange"
         floated="right"
+        as={Link}
+        to={`/manage/${activity.id}`}
       >
         Manage Event
       </Button>
