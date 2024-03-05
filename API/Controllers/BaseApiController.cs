@@ -4,8 +4,8 @@ using Application.Core;
 
 namespace API.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
+[ApiController]
 public class BaseApiController : ControllerBase
 {
     private IMediator _mediator;
