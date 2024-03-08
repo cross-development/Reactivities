@@ -6,11 +6,11 @@ import { Activity } from '../models/activity';
 import agent from '../api/agent';
 
 class ActivityStore {
-  activityRegistry = new Map<string, Activity>();
-  selectedActivity: Activity | undefined = undefined;
-  isEditMode = false;
-  isLoading = false;
-  isInitialLoading = false;
+  public activityRegistry = new Map<string, Activity>();
+  public selectedActivity: Activity | undefined = undefined;
+  public isEditMode = false;
+  public isLoading = false;
+  public isInitialLoading = false;
 
   constructor() {
     makeAutoObservable(this);

@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC, HTMLInputTypeAttribute, memo } from 'react';
 import { useField } from 'formik';
 import { Form, Label } from 'semantic-ui-react';
 
@@ -6,6 +6,7 @@ interface Props {
   placeholder: string;
   name: string;
   label?: string;
+  type?: HTMLInputTypeAttribute;
 }
 
 const CustomTextInput: FC<Props> = memo(props => {

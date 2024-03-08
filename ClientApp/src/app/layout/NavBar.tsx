@@ -1,50 +1,87 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Button, Container, Menu } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Image, Menu } from 'semantic-ui-react';
+import { observer } from 'mobx-react-lite';
 
-const NavBar: FC = memo(() => (
-  <Menu
-    inverted
-    fixed="top"
-  >
-    <Container>
-      <Menu.Item
-        header
-        to="/"
-        as={Link}
-      >
-        <img
-          alt="logo"
-          src="/assets/logo.png"
-          style={{ marginRight: '.625rem' }}
-        />
-        Reactivities
-      </Menu.Item>
+import { useStore } from '../../app/stores/store';
 
-      <Menu.Item
-        to="/activities"
-        name="Activities"
-        as={NavLink}
-      />
+const NavBar: FC = () => {
+  const {
+    userStore: { user, logout },
+  } = useStore();
 
-      <Menu.Item
-        to="/errors"
-        name="Errors"
-        as={NavLink}
-      />
+  return (
+    <Menu
+      inverted
+      fixed="top"
+    >
+      <Container>
+        <Menu.Item
+          header
+          to="/"
+          as={Link}
+        >
+          <img
+            alt="logo"
+            src="/assets/logo.png"
+            style={{ marginRight: '.625rem' }}
+          />
+          Reactivities
+        </Menu.Item>
 
-      <Menu.Item>
-        <Button
-          positive
-          content="Create Activity"
-          to="/create-activity"
+        <Menu.Item
+          to="/activities"
+          name="Activities"
           as={NavLink}
         />
-      </Menu.Item>
-    </Container>
-  </Menu>
-));
+
+        <Menu.Item
+          to="/errors"
+          name="Errors"
+          as={NavLink}
+        />
+
+        <Menu.Item>
+          <Button
+            positive
+            content="Create Activity"
+            to="/create-activity"
+            as={NavLink}
+          />
+        </Menu.Item>
+
+        <Menu.Item position="right">
+          <Image
+            avatar
+            spaced="right"
+            src={user?.image || '/assets/user.png'}
+          />
+
+          <Dropdown
+            pointing="top left"
+            text={user?.displayName}
+          >
+            <Dropdown.Menu>
+              <Dropdown.Item
+                icon="user"
+                text="My Profile"
+                to={`/profile/${user?.username}`}
+                as={Link}
+              />
+
+              <Dropdown.Item
+                icon="power"
+                text="Logout"
+                onClick={logout}
+              />
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Item>
+      </Container>
+    </Menu>
+  );
+};
 
 NavBar.displayName = 'NavBar';
 
-export default NavBar;
+export default observer(NavBar);
