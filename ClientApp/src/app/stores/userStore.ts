@@ -26,6 +26,8 @@ class UserStore {
       });
 
       router.navigate('/activities');
+
+      store.modalStore.closeModal();
     } catch (error) {
       console.log('error', error);
 

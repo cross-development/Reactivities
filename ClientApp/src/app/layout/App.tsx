@@ -8,6 +8,7 @@ import NavBar from './NavBar';
 import Loader from './Loader';
 import { useStore } from '../stores/store';
 import HomePage from '../../features/home/HomePage';
+import ModalContainer from '../common/modals/ModalContainer';
 
 const App: FC = () => {
   const location = useLocation();
@@ -28,6 +29,8 @@ const App: FC = () => {
 
   return (
     <>
+      <ModalContainer />
+
       <ToastContainer
         hideProgressBar
         theme="colored"

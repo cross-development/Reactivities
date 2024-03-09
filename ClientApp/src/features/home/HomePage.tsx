@@ -4,9 +4,10 @@ import { Container, Header, Segment, Image, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 
 import { useStore } from '../../app/stores/store';
+import LoginForm from '../users/LoginForm';
 
 const HomePage: FC = () => {
-  const { userStore } = useStore();
+  const { userStore, modalStore } = useStore();
 
   return (
     <Segment
@@ -47,14 +48,23 @@ const HomePage: FC = () => {
             </Button>
           </>
         ) : (
-          <Button
-            inverted
-            as={Link}
-            to="/login"
-            size="huge"
-          >
-            Login
-          </Button>
+          <>
+            <Button
+              inverted
+              size="huge"
+              onClick={() => modalStore.openModal(<LoginForm />)}
+            >
+              Login
+            </Button>
+
+            <Button
+              inverted
+              size="huge"
+              onClick={() => modalStore.openModal(<></>)}
+            >
+              Register
+            </Button>
+          </>
         )}
       </Container>
     </Segment>

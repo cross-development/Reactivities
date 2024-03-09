@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
-import { Button, Label } from 'semantic-ui-react';
+import { Button, Header, Label } from 'semantic-ui-react';
 
 import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
@@ -22,6 +22,13 @@ const LoginForm: FC = () => {
           onSubmit={handleSubmit}
           className="ui form"
         >
+          <Header
+            as="h2"
+            color="teal"
+            textAlign="center"
+            content="Login to Reactivities"
+          />
+
           <CustomTextInput
             name="email"
             placeholder="Email"
