@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import { useStore } from '../../app/stores/store';
 import LoginForm from '../users/LoginForm';
+import RegisterForm from '../users/RegisterForm';
 
 const HomePage: FC = () => {
   const { userStore, modalStore } = useStore();
@@ -60,7 +61,7 @@ const HomePage: FC = () => {
             <Button
               inverted
               size="huge"
-              onClick={() => modalStore.openModal(<></>)}
+              onClick={() => modalStore.openModal(<RegisterForm />)}
             >
               Register
             </Button>

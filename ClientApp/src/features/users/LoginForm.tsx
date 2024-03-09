@@ -30,6 +30,7 @@ const LoginForm: FC = () => {
           />
 
           <CustomTextInput
+            type="email"
             name="email"
             placeholder="Email"
           />

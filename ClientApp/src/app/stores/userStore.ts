@@ -16,6 +16,25 @@ class UserStore {
     return !!this.user;
   }
 
+  public register = async (credentials: UserFormValues) => {
+    try {
+      const user = await agent.Account.register(credentials);
+      store.commonStore.setToken(user.token);
+
+      runInAction(() => {
+        this.user = user;
+      });
+
+      router.navigate('/activities');
+
+      store.modalStore.closeModal();
+    } catch (error) {
+      console.log('error', error);
+
+      throw error;
+    }
+  };
+
   public login = async (credentials: UserFormValues) => {
     try {
       const user = await agent.Account.login(credentials);

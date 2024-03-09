@@ -61,14 +61,18 @@ public class AccountController : ControllerBase
 
         if (isUsernameExist)
         {
-            return BadRequest("Username is already taken");
+            ModelState.AddModelError("username", "Username is already taken");
+
+            return ValidationProblem();
         }
 
         var isEmailExist = await _userManager.Users.AnyAsync(user => user.Email == registerDto.Email);
 
         if (isEmailExist)
         {
-            return BadRequest("Email is already taken");
+            ModelState.AddModelError("email", "Email is already taken");
+
+            return ValidationProblem();
         }
 
         var user = new AppUser
