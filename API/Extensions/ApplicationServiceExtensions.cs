@@ -3,6 +3,8 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using Application.Activities;
 using Application.Core;
+using Application.Interfaces;
+using Infrastructure.Security;
 using Persistence;
 
 namespace API.Extensions;
@@ -43,6 +45,10 @@ public static class ApplicationServiceExtensions
         // Add FluentValidation 
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<Create>();
+
+        // Add User Accessor
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserAccessor, UserAccessor>();
 
         return services;
     }

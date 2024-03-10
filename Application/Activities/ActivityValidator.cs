@@ -7,11 +7,11 @@ public class ActivityValidator : AbstractValidator<Activity>
 {
     public ActivityValidator()
     {
-        RuleFor(x => x.Title).NotEmpty();
-        RuleFor(x => x.Description).NotEmpty();
-        RuleFor(x => x.Date).NotEmpty();
-        RuleFor(x => x.Category).NotEmpty();
-        RuleFor(x => x.City).NotEmpty();
-        RuleFor(x => x.Venue).NotEmpty();
+        RuleFor(activity => activity.Title).NotEmpty();
+        RuleFor(activity => activity.Description).NotEmpty();
+        RuleFor(activity => activity.Date).NotEmpty();
+        RuleFor(activity => activity.Category).NotEmpty();
+        RuleFor(activity => activity.City).NotEmpty();
+        RuleFor(activity => activity.Venue).NotEmpty();
     }
 }

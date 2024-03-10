@@ -14,11 +14,11 @@ public class Edit
         public Activity Activity { get; set; }
     }
 
-    class CommandValidator : AbstractValidator<Command>
+    private class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
-            RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
+            RuleFor(command => command.Activity).SetValidator(new ActivityValidator());
         }
     }
 
@@ -46,7 +46,7 @@ public class Edit
 
             var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-            if(!result )
+            if (!result)
             {
                 return Result<Unit>.Failure("Failed to update activity");
             }

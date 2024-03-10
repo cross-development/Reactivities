@@ -26,7 +26,9 @@ public class AccountController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost]
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -54,7 +56,9 @@ public class AccountController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost]
+    [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         var isUsernameExist = await _userManager.Users.AnyAsync(user => user.UserName == registerDto.Username);
@@ -99,7 +103,8 @@ public class AccountController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet]
+    [HttpGet("account")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
