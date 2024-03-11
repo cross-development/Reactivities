@@ -13,12 +13,22 @@ interface Props {
 const ActivityListItem: FC<Props> = ({ activity }) => (
   <Segment.Group>
     <Segment>
+      {activity.isCanceled && (
+        <Label
+          color="red"
+          attached="top"
+          content="Canceled"
+          style={{ textAlign: 'center' }}
+        />
+      )}
+
       <Item.Group>
         <Item>
           <Item.Image
             circular
             size="tiny"
             src="/assets/user.png"
+            style={{ marginBottom: 3 }}
           />
 
           <Item.Content>
@@ -30,6 +40,7 @@ const ActivityListItem: FC<Props> = ({ activity }) => (
             </Item.Header>
 
             <Item.Description>Hosted by {activity.host?.displayName}</Item.Description>
+
             {activity.isHost && (
               <Item.Description>
                 <Label

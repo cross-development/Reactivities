@@ -154,7 +154,7 @@ class ActivityStore {
     }
   };
 
-  public updateAttendance = async () => {
+  public updateAttendance = async (): Promise<void> => {
     const user = store.userStore.user;
 
     this.isLoading = true;
@@ -175,6 +175,25 @@ class ActivityStore {
           this.selectedActivity!.isGoing = true;
         }
 
+        this.activityRegistry.set(this.selectedActivity!.id, this.selectedActivity!);
+      });
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+  };
+
+  public cancelActivityToggle = async (): Promise<void> => {
+    this.isLoading = true;
+
+    try {
+      await agent.Activities.attend(this.selectedActivity!.id);
+
+      runInAction(() => {
+        this.selectedActivity!.isCanceled = !this.selectedActivity?.isCanceled;
         this.activityRegistry.set(this.selectedActivity!.id, this.selectedActivity!);
       });
     } catch (error) {

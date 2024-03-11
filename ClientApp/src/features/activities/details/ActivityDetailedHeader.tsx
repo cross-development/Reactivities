@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
-import { Header, Segment, Image, Item, Button } from 'semantic-ui-react';
+import { Header, Segment, Image, Item, Button, Label } from 'semantic-ui-react';
 import { format } from 'date-fns';
 
 import { IActivity } from '../../../app/models/activity';
@@ -13,7 +13,7 @@ interface Props {
 
 const ActivityDetailedHeader: FC<Props> = observer(({ activity }) => {
   const {
-    activityStore: { updateAttendance, isLoading },
+    activityStore: { updateAttendance, cancelActivityToggle, isLoading },
   } = useStore();
 
   return (
@@ -23,6 +23,15 @@ const ActivityDetailedHeader: FC<Props> = observer(({ activity }) => {
         attached="top"
         style={{ padding: '0' }}
       >
+        {activity.isCanceled && (
+          <Label
+            ribbon
+            color="red"
+            content="Canceled"
+            style={{ position: 'absolute', zIndex: 1000, left: -14, top: 20 }}
+          />
+        )}
+
         <Image
           fluid
           src={`/assets/categoryImages/${activity.category}.jpg`}
@@ -50,6 +59,7 @@ const ActivityDetailedHeader: FC<Props> = observer(({ activity }) => {
                 />
 
                 <p>{format(activity.date!, 'dd MMM yyyy')}</p>
+
                 <p>
                   Hosted by{' '}
                   <strong>
@@ -69,14 +79,26 @@ const ActivityDetailedHeader: FC<Props> = observer(({ activity }) => {
         attached="bottom"
       >
         {activity.isHost ? (
-          <Button
-            color="orange"
-            floated="right"
-            as={Link}
-            to={`/manage/${activity.id}`}
-          >
-            Manage Event
-          </Button>
+          <>
+            <Button
+              basic
+              floated="left"
+              loading={isLoading}
+              color={activity.isCanceled ? 'green' : 'red'}
+              content={activity.isCanceled ? 'Re-activate Activity' : 'Cancel Activity'}
+              onClick={cancelActivityToggle}
+            />
+
+            <Button
+              color="orange"
+              floated="right"
+              as={Link}
+              to={`/manage/${activity.id}`}
+              disabled={activity.isCanceled}
+            >
+              Manage Event
+            </Button>
+          </>
         ) : activity.isGoing ? (
           <Button
             loading={isLoading}
@@ -88,6 +110,7 @@ const ActivityDetailedHeader: FC<Props> = observer(({ activity }) => {
           <Button
             color="teal"
             loading={isLoading}
+            disabled={activity.isCanceled}
             onClick={updateAttendance}
           >
             Join Activity
