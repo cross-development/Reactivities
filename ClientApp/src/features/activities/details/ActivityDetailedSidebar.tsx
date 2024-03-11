@@ -3,78 +3,69 @@ import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Segment, List, Label, Item, Image } from 'semantic-ui-react';
 
-const ActivityDetailedSidebar: FC = observer(() => (
-  <>
-    <Segment
-      inverted
-      secondary
-      color="teal"
-      attached="top"
-      textAlign="center"
-      style={{ border: 'none' }}
-    >
-      3 People Going
-    </Segment>
+import { IActivity } from '../../../app/models/activity';
 
-    <Segment attached>
-      <List
-        relaxed
-        divided
+interface Props {
+  activity: IActivity;
+}
+
+const ActivityDetailedSidebar: FC<Props> = observer(({ activity }) => {
+  if (!activity.attendees) {
+    return null;
+  }
+
+  return (
+    <>
+      <Segment
+        inverted
+        secondary
+        color="teal"
+        attached="top"
+        textAlign="center"
+        style={{ border: 'none' }}
       >
-        <Item style={{ position: 'relative' }}>
-          <Label
-            color="orange"
-            ribbon="right"
-            style={{ position: 'absolute' }}
-          >
-            Host
-          </Label>
+        {activity.attendees.length} {activity.attendees.length === 1 ? 'Person' : 'People'} going
+      </Segment>
 
-          <Image
-            size="tiny"
-            src={'/assets/user.png'}
-          />
+      <Segment attached>
+        <List
+          relaxed
+          divided
+        >
+          {activity.attendees.map(attendee => (
+            <Item
+              key={attendee.username}
+              style={{ position: 'relative' }}
+            >
+              {attendee.username === activity.host?.username && (
+                <Label
+                  color="orange"
+                  ribbon="right"
+                  style={{ position: 'absolute' }}
+                >
+                  Host
+                </Label>
+              )}
 
-          <Item.Content verticalAlign="middle">
-            <Item.Header as="h3">
-              <Link to={`#`}>Bob</Link>
-            </Item.Header>
+              <Image
+                size="tiny"
+                src={attendee.image || '/assets/user.png'}
+              />
 
-            <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
-          </Item.Content>
-        </Item>
+              <Item.Content verticalAlign="middle">
+                <Item.Header as="h3">
+                  <Link to={`/profile/${attendee.username}`}>{attendee.displayName}</Link>
+                </Item.Header>
 
-        <Item style={{ position: 'relative' }}>
-          <Image
-            size="tiny"
-            src={'/assets/user.png'}
-          />
-
-          <Item.Content verticalAlign="middle">
-            <Item.Header as="h3">
-              <Link to={`#`}>Tom</Link>
-            </Item.Header>
-
-            <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
-          </Item.Content>
-        </Item>
-
-        <Item style={{ position: 'relative' }}>
-          <Image
-            size="tiny"
-            src={'/assets/user.png'}
-          />
-
-          <Item.Content verticalAlign="middle">
-            <Item.Header as="h3">
-              <Link to={`#`}>Sally</Link>
-            </Item.Header>
-          </Item.Content>
-        </Item>
-      </List>
-    </Segment>
-  </>
-));
+                <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
+              </Item.Content>
+            </Item>
+          ))}
+        </List>
+      </Segment>
+    </>
+  );
+});
 
 ActivityDetailedSidebar.displayName = 'ActivityDetailedSidebar';
 

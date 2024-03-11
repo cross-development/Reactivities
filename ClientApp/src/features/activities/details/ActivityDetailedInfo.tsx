@@ -3,10 +3,10 @@ import { observer } from 'mobx-react-lite';
 import { Grid, Icon, Segment } from 'semantic-ui-react';
 import { format } from 'date-fns';
 
-import { Activity } from '../../../app/models/activity';
+import { IActivity } from '../../../app/models/activity';
 
 interface Props {
-  activity: Activity;
+  activity: IActivity;
 }
 
 const ActivityDetailedInfo: FC<Props> = observer(({ activity }) => (

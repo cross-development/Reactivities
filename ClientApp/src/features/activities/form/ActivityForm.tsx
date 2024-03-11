@@ -6,7 +6,7 @@ import { Formik, Form } from 'formik';
 import { v4 as uuid } from 'uuid';
 import * as Yup from 'yup';
 
-import { Activity } from '../../../app/models/activity';
+import { ActivityFormValues } from '../../../app/models/activity';
 import { useStore } from '../../../app/stores/store';
 import Loader from '../../../app/layout/Loader';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
@@ -16,15 +16,7 @@ import CustomDateInput from '../../../app/common/form/CustomDateInput';
 import { categoryOptions } from '../../../app/common/options/categoryOptions';
 
 const ActivityForm: FC = () => {
-  const [activity, setActivity] = useState<Activity>({
-    id: '',
-    title: '',
-    category: '',
-    description: '',
-    date: null,
-    city: '',
-    venue: '',
-  });
+  const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
   const { id } = useParams();
 
@@ -40,16 +32,16 @@ const ActivityForm: FC = () => {
   });
 
   const {
-    activityStore: { isLoading, isInitialLoading, loadActivity, updateActivity, createActivity },
+    activityStore: { isInitialLoading, loadActivity, updateActivity, createActivity },
   } = useStore();
 
   useEffect(() => {
     if (id) {
-      loadActivity(id).then(activity => setActivity(activity!));
+      loadActivity(id).then(activity => setActivity(new ActivityFormValues(activity)));
     }
   }, [id, loadActivity]);
 
-  const handleFormSubmit = async (activity: Activity): Promise<void> => {
+  const handleFormSubmit = async (activity: ActivityFormValues): Promise<void> => {
     if (!activity.id) {
       activity.id = uuid();
       await createActivity(activity);
@@ -135,7 +127,7 @@ const ActivityForm: FC = () => {
               type="submit"
               floated="right"
               content="Submit"
-              loading={isLoading}
+              loading={isSubmitting}
               disabled={isSubmitting || !dirty || !isValid}
             />
 
