@@ -4,6 +4,7 @@ using FluentValidation;
 using Application.Activities;
 using Application.Core;
 using Application.Interfaces;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using Persistence;
 
@@ -49,6 +50,11 @@ public static class ApplicationServiceExtensions
         // Add User Accessor
         services.AddHttpContextAccessor();
         services.AddScoped<IUserAccessor, UserAccessor>();
+
+        // Add Photo Accessor
+        services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
+        services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 
         return services;
     }

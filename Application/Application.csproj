@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Profiles\" />
+	  <Folder Include="Photos\" />
 	</ItemGroup>
 
 </Project>

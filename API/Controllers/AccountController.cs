@@ -31,7 +31,9 @@ public class AccountController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
-        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        var user = await _userManager.Users
+            .Include(user => user.Photos)
+            .FirstOrDefaultAsync(user => user.Email == loginDto.Email);
 
         if (user == null)
         {
@@ -49,7 +51,7 @@ public class AccountController : ControllerBase
         return new UserDto
         {
             DisplayName = user.DisplayName,
-            Image = null,
+            Image = user?.Photos?.FirstOrDefault(photo => photo.IsMain)?.Url,
             Token = _tokenService.CreateToken(user),
             Username = user.UserName
         };
@@ -93,7 +95,7 @@ public class AccountController : ControllerBase
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Image = null,
+                Image = user?.Photos?.FirstOrDefault(photo => photo.IsMain)?.Url,
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName
             };
@@ -103,16 +105,19 @@ public class AccountController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("account")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
-        var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+        var user = await _userManager.Users
+            .Include(user => user.Photos)
+            .FirstOrDefaultAsync(user => user.Email == User.FindFirstValue(ClaimTypes.Email));
+
 
         return new UserDto
         {
             DisplayName = user.DisplayName,
-            Image = null,
+            Image = user?.Photos?.FirstOrDefault(photo => photo.IsMain)?.Url,
             Token = _tokenService.CreateToken(user),
             Username = user.UserName
         };
