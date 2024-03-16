@@ -7,7 +7,7 @@ import { useStore } from '../../app/stores/store';
 import LoginForm from '../users/LoginForm';
 import RegisterForm from '../users/RegisterForm';
 
-const HomePage: FC = () => {
+const HomePage: FC = observer(() => {
   const { userStore, modalStore } = useStore();
 
   return (
@@ -70,8 +70,8 @@ const HomePage: FC = () => {
       </Container>
     </Segment>
   );
-};
+});
 
 HomePage.displayName = 'HomePage';
 
-export default observer(HomePage);
+export default HomePage;

@@ -16,7 +16,7 @@ class UserStore {
     return !!this.user;
   }
 
-  public register = async (credentials: UserFormValues) => {
+  public register = async (credentials: UserFormValues): Promise<void> => {
     try {
       const user = await agent.Account.register(credentials);
       store.commonStore.setToken(user.token);
@@ -35,7 +35,7 @@ class UserStore {
     }
   };
 
-  public login = async (credentials: UserFormValues) => {
+  public login = async (credentials: UserFormValues): Promise<void> => {
     try {
       const user = await agent.Account.login(credentials);
       store.commonStore.setToken(user.token);
@@ -54,7 +54,7 @@ class UserStore {
     }
   };
 
-  public logout = () => {
+  public logout = (): void => {
     store.commonStore.setToken(null);
 
     this.user = null;
@@ -71,6 +71,12 @@ class UserStore {
       });
     } catch (error) {
       console.log('error', error);
+    }
+  };
+
+  public setImage = (image: string): void => {
+    if (this.user) {
+      this.user.image = image;
     }
   };
 }

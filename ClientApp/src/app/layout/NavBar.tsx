@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import { useStore } from '../../app/stores/store';
 
-const NavBar: FC = () => {
+const NavBar: FC = observer(() => {
   const {
     userStore: { user, logout },
   } = useStore();
@@ -65,7 +65,7 @@ const NavBar: FC = () => {
               <Dropdown.Item
                 icon="user"
                 text="My Profile"
-                to={`/profile/${user?.username}`}
+                to={`/profiles/${user?.username}`}
                 as={Link}
               />
 
@@ -80,8 +80,8 @@ const NavBar: FC = () => {
       </Container>
     </Menu>
   );
-};
+});
 
 NavBar.displayName = 'NavBar';
 
-export default observer(NavBar);
+export default NavBar;

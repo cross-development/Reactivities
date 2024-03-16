@@ -15,7 +15,7 @@ import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomDateInput from '../../../app/common/form/CustomDateInput';
 import { categoryOptions } from '../../../app/common/options/categoryOptions';
 
-const ActivityForm: FC = () => {
+const ActivityForm: FC = observer(() => {
   const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
   const { id } = useParams();
@@ -143,8 +143,8 @@ const ActivityForm: FC = () => {
       </Formik>
     </Segment>
   );
-};
+});
 
 ActivityForm.displayName = 'ActivityForm';
 
-export default observer(ActivityForm);
+export default ActivityForm;

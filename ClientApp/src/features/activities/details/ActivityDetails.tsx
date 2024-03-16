@@ -10,7 +10,7 @@ import ActivityDetailedInfo from './ActivityDetailedInfo';
 import ActivityDetailedChat from './ActivityDetailedChat';
 import ActivityDetailedSidebar from './ActivityDetailedSidebar';
 
-const ActivityDetails: FC = () => {
+const ActivityDetails: FC = observer(() => {
   const {
     activityStore: { selectedActivity, isInitialLoading, loadActivity },
   } = useStore();
@@ -42,8 +42,8 @@ const ActivityDetails: FC = () => {
       </Grid.Column>
     </Grid>
   );
-};
+});
 
 ActivityDetails.displayName = 'ActivityDetails';
 
-export default observer(ActivityDetails);
+export default ActivityDetails;

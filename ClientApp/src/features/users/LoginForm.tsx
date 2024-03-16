@@ -6,7 +6,7 @@ import { Button, Header, Label } from 'semantic-ui-react';
 import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
 
-const LoginForm: FC = () => {
+const LoginForm: FC = observer(() => {
   const { userStore } = useStore();
 
   return (
@@ -64,8 +64,8 @@ const LoginForm: FC = () => {
       )}
     </Formik>
   );
-};
+});
 
 LoginForm.displayName = 'LoginForm';
 
-export default observer(LoginForm);
+export default LoginForm;

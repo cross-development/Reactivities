@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { Header, Menu } from 'semantic-ui-react';
 import Calendar from 'react-calendar';
 
-const ActivityFilters: FC = () => (
+const ActivityFilters: FC = memo(() => (
   <Menu
     vertical
     size="large"
@@ -25,7 +25,7 @@ const ActivityFilters: FC = () => (
 
     <Calendar />
   </Menu>
-);
+));
 
 ActivityFilters.displayName = 'ActivityFilters';
 

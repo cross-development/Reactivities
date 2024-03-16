@@ -10,7 +10,7 @@ import { useStore } from '../stores/store';
 import HomePage from '../../features/home/HomePage';
 import ModalContainer from '../common/modals/ModalContainer';
 
-const App: FC = () => {
+const App: FC = observer(() => {
   const location = useLocation();
 
   const { commonStore, userStore } = useStore();
@@ -50,8 +50,8 @@ const App: FC = () => {
       )}
     </>
   );
-};
+});
 
 App.displayName = 'App';
 
-export default observer(App);
+export default App;

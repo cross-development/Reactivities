@@ -10,7 +10,7 @@ interface Props {
   attendees: IProfile[];
 }
 
-const ActivityListItemAttendee: FC<Props> = ({ attendees }) => (
+const ActivityListItemAttendee: FC<Props> = observer(({ attendees }) => (
   <List horizontal>
     {attendees.map(attendee => (
       <Popup
@@ -19,7 +19,7 @@ const ActivityListItemAttendee: FC<Props> = ({ attendees }) => (
         trigger={
           <List.Item
             as={Link}
-            to={`/profile/${attendee.username}`}
+            to={`/profiles/${attendee.username}`}
           >
             <Image
               circular
@@ -35,8 +35,8 @@ const ActivityListItemAttendee: FC<Props> = ({ attendees }) => (
       </Popup>
     ))}
   </List>
-);
+));
 
 ActivityListItemAttendee.displayName = 'ActivityListItemAttendee';
 
-export default observer(ActivityListItemAttendee);
+export default ActivityListItemAttendee;

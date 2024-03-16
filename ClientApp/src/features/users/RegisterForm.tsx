@@ -8,7 +8,7 @@ import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
 import ValidationError from '../errors/ValidationError';
 
-const RegisterForm: FC = () => {
+const RegisterForm: FC = observer(() => {
   const { userStore } = useStore();
 
   const validationSchema = Yup.object({
@@ -78,8 +78,8 @@ const RegisterForm: FC = () => {
       )}
     </Formik>
   );
-};
+});
 
 RegisterForm.displayName = 'RegisterForm';
 
-export default observer(RegisterForm);
+export default RegisterForm;

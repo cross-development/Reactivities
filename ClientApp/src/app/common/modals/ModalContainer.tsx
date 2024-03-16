@@ -4,7 +4,7 @@ import { Modal } from 'semantic-ui-react';
 
 import { useStore } from '../../stores/store';
 
-const ModalContainer: FC = () => {
+const ModalContainer: FC = observer(() => {
   const { modalStore } = useStore();
 
   return (
@@ -16,8 +16,8 @@ const ModalContainer: FC = () => {
       <Modal.Content>{modalStore.modal.body}</Modal.Content>
     </Modal>
   );
-};
+});
 
 ModalContainer.displayName = 'ModalContainer';
 
-export default observer(ModalContainer);
+export default ModalContainer;

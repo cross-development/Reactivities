@@ -9,7 +9,7 @@ interface Props {
   profile: Profile;
 }
 
-const ProfileCard: FC<Props> = ({ profile }) => (
+const ProfileCard: FC<Props> = observer(({ profile }) => (
   <Card
     as={Link}
     to={`/profiles/${profile.username}`}
@@ -27,8 +27,8 @@ const ProfileCard: FC<Props> = ({ profile }) => (
       20 followers
     </Card.Content>
   </Card>
-);
+));
 
 ProfileCard.displayName = 'ProfileCard';
 
-export default observer(ProfileCard);
+export default ProfileCard;

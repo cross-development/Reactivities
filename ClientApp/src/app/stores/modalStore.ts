@@ -15,7 +15,7 @@ class ModalStore {
     makeAutoObservable(this);
   }
 
-  public openModal = (content: JSX.Element) => {
+  public openModal = (content: JSX.Element): void => {
     this.modal.open = true;
     this.modal.body = content;
   };

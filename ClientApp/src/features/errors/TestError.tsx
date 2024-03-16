@@ -9,27 +9,27 @@ const TestError = memo(() => {
 
   const [errors, setErrors] = useState(null);
 
-  const handleNotFound = () => {
+  const handleNotFound = (): void => {
     axios.get(baseUrl + 'buggy/not-found').catch(err => console.log(err.response));
   };
 
-  const handleBadRequest = () => {
+  const handleBadRequest = (): void => {
     axios.get(baseUrl + 'buggy/bad-request').catch(err => console.log(err.response));
   };
 
-  const handleServerError = () => {
+  const handleServerError = (): void => {
     axios.get(baseUrl + 'buggy/server-error').catch(err => console.log(err.response));
   };
 
-  const handleUnauthorised = () => {
+  const handleUnauthorised = (): void => {
     axios.get(baseUrl + 'buggy/unauthorised').catch(err => console.log(err.response));
   };
 
-  const handleBadGuid = () => {
+  const handleBadGuid = (): void => {
     axios.get(baseUrl + 'activities/notaguid').catch(err => console.log(err.response));
   };
 
-  const handleValidationError = () => {
+  const handleValidationError = (): void => {
     axios.post(baseUrl + 'activities', {}).catch(err => setErrors(err));
   };
 
