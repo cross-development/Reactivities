@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Comments\" />
 	  <Folder Include="Photos\" />
 	</ItemGroup>
 
