@@ -12,7 +12,7 @@ import ActivityDetailedSidebar from './ActivityDetailedSidebar';
 
 const ActivityDetails: FC = observer(() => {
   const {
-    activityStore: { selectedActivity, isInitialLoading, loadActivity },
+    activityStore: { selectedActivity, isInitialLoading, loadActivity, clearSelectedActivity },
   } = useStore();
 
   const { id } = useParams();
@@ -21,7 +21,11 @@ const ActivityDetails: FC = observer(() => {
     if (id) {
       loadActivity(id);
     }
-  }, [id, loadActivity]);
+
+    return () => {
+      clearSelectedActivity();
+    };
+  }, [id, loadActivity, clearSelectedActivity]);
 
   if (isInitialLoading || !selectedActivity) {
     return <Loader />;
@@ -34,7 +38,7 @@ const ActivityDetails: FC = observer(() => {
 
         <ActivityDetailedInfo activity={selectedActivity} />
 
-        <ActivityDetailedChat />
+        <ActivityDetailedChat activityId={selectedActivity.id} />
       </Grid.Column>
 
       <Grid.Column width={6}>

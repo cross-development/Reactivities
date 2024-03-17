@@ -30,7 +30,10 @@ public static class ApplicationServiceExtensions
         {
             options.AddPolicy("CorsPolicy", policy =>
             {
-                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                policy.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:3000");
             });
         });
 
@@ -53,8 +56,10 @@ public static class ApplicationServiceExtensions
 
         // Add Photo Accessor
         services.AddScoped<IPhotoAccessor, PhotoAccessor>();
-
         services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
+
+        // Add SignalR
+        services.AddSignalR();
 
         return services;
     }

@@ -28,7 +28,7 @@ const ActivityListItem: FC<Props> = memo(({ activity }) => (
             circular
             size="tiny"
             src={activity.host?.image || '/assets/user.png'}
-            style={{ marginBottom: 3 }}
+            style={{ marginBottom: 5 }}
           />
 
           <Item.Content>
@@ -55,7 +55,7 @@ const ActivityListItem: FC<Props> = memo(({ activity }) => (
               </Item.Description>
             )}
 
-            {activity.isGoing && (
+            {activity.isGoing && !activity.isHost && (
               <Item.Description>
                 <Label
                   basic

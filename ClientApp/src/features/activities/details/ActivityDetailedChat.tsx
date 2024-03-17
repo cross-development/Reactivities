@@ -1,69 +1,109 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Segment, Header, Comment, Form, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Segment, Header, Comment, Loader } from 'semantic-ui-react';
+import { Formik, Form, Field, FieldProps } from 'formik';
+import { formatDistanceToNow } from 'date-fns';
+import * as Yup from 'yup';
 
-const ActivityDetailedChat: FC = observer(() => (
-  <>
-    <Segment
-      inverted
-      color="teal"
-      attached="top"
-      textAlign="center"
-      style={{ border: 'none' }}
-    >
-      <Header>Chat about this event</Header>
-    </Segment>
+import { useStore } from '../../../app/stores/store';
 
-    <Segment attached>
-      <Comment.Group>
-        <Comment>
-          <Comment.Avatar src="/assets/user.png" />
-          <Comment.Content>
-            <Comment.Author as="a">Matt</Comment.Author>
+interface Props {
+  activityId: string;
+}
 
-            <Comment.Metadata>
-              <div>Today at 5:42PM</div>
-            </Comment.Metadata>
+const ActivityDetailedChat: FC<Props> = observer(({ activityId }) => {
+  const { commentStore } = useStore();
 
-            <Comment.Text>How artistic!</Comment.Text>
+  useEffect(() => {
+    if (activityId) {
+      commentStore.createHubConnection(activityId);
+    }
 
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
+    return () => {
+      commentStore.clearComments();
+    };
+  }, [activityId, commentStore]);
 
-        <Comment>
-          <Comment.Avatar src="/assets/user.png" />
-          <Comment.Content>
-            <Comment.Author as="a">Joe Henderson</Comment.Author>
+  return (
+    <>
+      <Segment
+        inverted
+        color="teal"
+        attached="top"
+        textAlign="center"
+        style={{ border: 'none' }}
+      >
+        <Header>Chat about this event</Header>
+      </Segment>
 
-            <Comment.Metadata>
-              <div>5 days ago</div>
-            </Comment.Metadata>
+      <Segment
+        attached
+        clearing
+      >
+        <Formik
+          initialValues={{ body: '' }}
+          validationSchema={Yup.object({ body: Yup.string().required() })}
+          onSubmit={(values, { resetForm }) =>
+            commentStore.addComment(values).then(() => resetForm())
+          }
+        >
+          {({ isSubmitting, isValid, handleSubmit }) => (
+            <Form className="ui form">
+              <Field name="body">
+                {(props: FieldProps) => (
+                  <div style={{ position: 'relative' }}>
+                    <Loader active={isSubmitting} />
 
-            <Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
+                    <textarea
+                      rows={2}
+                      placeholder="Enter your comment (Enter to submit, SHIFT + Enter for new line)"
+                      {...props.field}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' && e.shiftKey) {
+                          return;
+                        }
 
-            <Comment.Actions>
-              <Comment.Action>Reply</Comment.Action>
-            </Comment.Actions>
-          </Comment.Content>
-        </Comment>
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
 
-        <Form reply>
-          <Form.TextArea />
+                          isValid && handleSubmit();
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              </Field>
+            </Form>
+          )}
+        </Formik>
 
-          <Button
-            primary
-            icon="edit"
-            content="Add Reply"
-            labelPosition="left"
-          />
-        </Form>
-      </Comment.Group>
-    </Segment>
-  </>
-));
+        <Comment.Group>
+          {commentStore.comments.map(comment => (
+            <Comment key={comment.id}>
+              <Comment.Avatar src={comment.image || '/assets/user.png'} />
+
+              <Comment.Content>
+                <Comment.Author
+                  as={Link}
+                  to={`/profiles/${comment.username}`}
+                >
+                  {comment.displayName}
+                </Comment.Author>
+
+                <Comment.Metadata>
+                  <div>{formatDistanceToNow(comment.createdAt)} ago</div>
+                </Comment.Metadata>
+
+                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>{comment.body}</Comment.Text>
+              </Comment.Content>
+            </Comment>
+          ))}
+        </Comment.Group>
+      </Segment>
+    </>
+  );
+});
 
 ActivityDetailedChat.displayName = 'ActivityDetailedChat';
 
