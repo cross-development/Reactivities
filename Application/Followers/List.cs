@@ -2,9 +2,9 @@
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using MediatR;
+using Persistence;
 using Application.Core;
 using Application.Interfaces;
-using Persistence;
 
 namespace Application.Followers;
 
@@ -46,7 +46,8 @@ public class List
                 case "following":
                     profiles = await _context.UserFollowings.Where(user => user.Observer.UserName == request.Username)
                         .Select(user => user.Target)
-                        .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider)
+                        .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
+                            new { currentUsername = _userAccessor.GetUsername() })
                         .ToListAsync(cancellationToken);
                     break;
             }
