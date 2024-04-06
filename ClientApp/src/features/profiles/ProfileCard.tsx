@@ -4,6 +4,7 @@ import { Card, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { Profile } from '../../app/models/profile';
+import FollowButton from './FollowButton';
 
 interface Props {
   profile: Profile;
@@ -24,8 +25,10 @@ const ProfileCard: FC<Props> = observer(({ profile }) => (
 
     <Card.Content extra>
       <Icon name="user" />
-      20 followers
+      {profile.followersCount} Followers
     </Card.Content>
+
+    <FollowButton profile={profile} />
   </Card>
 ));
 

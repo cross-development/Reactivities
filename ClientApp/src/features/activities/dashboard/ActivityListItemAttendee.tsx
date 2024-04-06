@@ -10,32 +10,41 @@ interface Props {
   attendees: IProfile[];
 }
 
-const ActivityListItemAttendee: FC<Props> = observer(({ attendees }) => (
-  <List horizontal>
-    {attendees.map(attendee => (
-      <Popup
-        key={attendee.username}
-        hoverable
-        trigger={
-          <List.Item
-            as={Link}
-            to={`/profiles/${attendee.username}`}
-          >
-            <Image
-              circular
-              size="mini"
-              src={attendee.image || '/assets/user.png'}
-            />
-          </List.Item>
-        }
-      >
-        <Popup.Content>
-          <ProfileCard profile={attendee} />
-        </Popup.Content>
-      </Popup>
-    ))}
-  </List>
-));
+const ActivityListItemAttendee: FC<Props> = observer(({ attendees }) => {
+  const styles = {
+    borderColor: 'orange',
+    borderWidth: 3,
+  };
+
+  return (
+    <List horizontal>
+      {attendees.map(attendee => (
+        <Popup
+          key={attendee.username}
+          hoverable
+          trigger={
+            <List.Item
+              as={Link}
+              to={`/profiles/${attendee.username}`}
+            >
+              <Image
+                bordered
+                circular
+                size="mini"
+                src={attendee.image || '/assets/user.png'}
+                style={attendee.following ? styles : null}
+              />
+            </List.Item>
+          }
+        >
+          <Popup.Content>
+            <ProfileCard profile={attendee} />
+          </Popup.Content>
+        </Popup>
+      ))}
+    </List>
+  );
+});
 
 ActivityListItemAttendee.displayName = 'ActivityListItemAttendee';
 
