@@ -5,7 +5,7 @@ namespace API.Controllers;
 
 public class FollowController : BaseApiController
 {
-    [HttpGet("{username}")]
+    [HttpPost("{username}")]
     public async Task<IActionResult> Follow(string username)
     {
         return HandleResult(await Mediator.Send(new FollowToggle.Command { TargetUsername = username }));

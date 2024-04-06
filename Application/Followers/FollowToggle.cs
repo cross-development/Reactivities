@@ -28,10 +28,10 @@ public class FollowToggle
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var observer = await _context.Users
-                .FirstOrDefaultAsync(user => user.UserName == _userAccessor.GetUsername(), cancellationToken);
+                .FirstOrDefaultAsync(appUser => appUser.UserName == _userAccessor.GetUsername(), cancellationToken);
 
             var target = await _context.Users
-                .FirstOrDefaultAsync(user => user.UserName == request.TargetUsername, cancellationToken);
+                .FirstOrDefaultAsync(appUser => appUser.UserName == request.TargetUsername, cancellationToken);
 
             if (target == null)
             {

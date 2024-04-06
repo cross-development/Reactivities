@@ -31,8 +31,7 @@ public class Details
         public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
-                .ProjectTo<Profile>(_mapper.ConfigurationProvider,
-                    new { currentUsername = _userAccessor.GetUsername() })
+                .ProjectTo<Profile>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                 .SingleOrDefaultAsync(user => user.Username == request.Username, cancellationToken);
 
             return Result<Profile>.Success(user);

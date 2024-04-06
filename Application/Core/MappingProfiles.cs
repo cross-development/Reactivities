@@ -13,48 +13,51 @@ public class MappingProfiles : Profile
 
         CreateMap<Activity, Activity>();
 
-        CreateMap<Activity, ActivityDto>().ForMember(activityDto => activityDto.HostUsername, configuration => 
-            configuration.MapFrom(activity => activity.Attendees.FirstOrDefault(activityAttendee => 
-                activityAttendee.IsHost).AppUser.UserName));
+        CreateMap<Activity, ActivityDto>()
+            .ForMember(activityDto => activityDto.HostUsername, configuration =>
+                configuration.MapFrom(activity => activity.Attendees.FirstOrDefault(activityAttendee =>
+                    activityAttendee.IsHost).AppUser.UserName));
 
-        CreateMap<ActivityAttendee, Profiles.Profile>().ForMember(profile => profile.DisplayName, configuration => 
-            configuration.MapFrom(activityAttendee => activityAttendee.AppUser.DisplayName));
+        CreateMap<ActivityAttendee, Profiles.Profile>()
+            .ForMember(profile => profile.DisplayName, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.AppUser.DisplayName));
 
         CreateMap<ActivityAttendee, AttendeeDto>()
-            .ForMember(attendeeDto => attendeeDto.DisplayName, configuration => 
-                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.DisplayName))
-            .ForMember(attendeeDto => attendeeDto.Username, configuration => 
-                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.UserName))
-            .ForMember(attendeeDto => attendeeDto.Bio, configuration => 
-                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Bio))
-            .ForMember(attendeeDto => attendeeDto.Image, configuration => 
-                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Photos.FirstOrDefault(photo => 
-                        photo.IsMain).Url))
-            .ForMember(attendeeDto => attendeeDto.FollowersCount, configuration => 
-                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Followers.Count))
-            .ForMember(attendeeDto => attendeeDto.FollowersCount, configuration => 
-                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Followings.Count))
-            .ForMember(attendeeDto => attendeeDto.Following, configuration => 
-                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Followers.Any(userFollowing => 
+            .ForMember(attendeeDto => attendeeDto.DisplayName, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.AppUser.DisplayName))
+            .ForMember(attendeeDto => attendeeDto.Username, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.AppUser.UserName))
+            .ForMember(attendeeDto => attendeeDto.Bio, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Bio))
+            .ForMember(attendeeDto => attendeeDto.Image, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Photos.FirstOrDefault(photo =>
+                    photo.IsMain).Url))
+            .ForMember(attendeeDto => attendeeDto.FollowersCount, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Followers.Count))
+            .ForMember(attendeeDto => attendeeDto.FollowingCount, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Followings.Count))
+            .ForMember(attendeeDto => attendeeDto.Following, configuration =>
+                    configuration.MapFrom(activityAttendee => activityAttendee.AppUser.Followers.Any(userFollowing =>
                         userFollowing.Observer.UserName == currentUsername)));
 
         CreateMap<AppUser, Profiles.Profile>()
             .ForMember(profile => profile.Image, configuration =>
-                configuration.MapFrom(user => user.Photos.FirstOrDefault(photo => photo.IsMain).Url))
+                configuration.MapFrom(appUser => appUser.Photos.FirstOrDefault(photo => photo.IsMain).Url))
             .ForMember(profile => profile.FollowersCount, configuration =>
-                configuration.MapFrom(user => user.Followers.Count))
-            .ForMember(profile => profile.FollowersCount, configuration =>
-                configuration.MapFrom(user => user.Followings.Count))
+                configuration.MapFrom(appUser => appUser.Followers.Count))
+            .ForMember(profile => profile.FollowingCount, configuration =>
+                configuration.MapFrom(appUser => appUser.Followings.Count))
             .ForMember(profile => profile.Following, configuration =>
-                configuration.MapFrom(user => user.Followers.Any(userFollowing => 
+                configuration.MapFrom(appUser => appUser.Followers.Any(userFollowing =>
                     userFollowing.Observer.UserName == currentUsername)));
 
         CreateMap<Comment, CommentDto>()
-            .ForMember(commentDto => commentDto.DisplayName, configuration => 
-                configuration.MapFrom(comment => comment.Author.DisplayName))
-            .ForMember(commentDto => commentDto.Username, configuration => 
+            .ForMember(commentDto => commentDto.Username, configuration =>
                 configuration.MapFrom(comment => comment.Author.UserName))
-            .ForMember(commentDto => commentDto.Image, configuration => 
-                configuration.MapFrom(comment => comment.Author.Photos.FirstOrDefault(photo => photo.IsMain).Url));
+            .ForMember(commentDto => commentDto.DisplayName, configuration =>
+                configuration.MapFrom(comment => comment.Author.DisplayName))
+            .ForMember(commentDto => commentDto.Image, configuration =>
+                configuration.MapFrom(comment => comment.Author.Photos.FirstOrDefault(photo =>
+                    photo.IsMain).Url));
     }
 }

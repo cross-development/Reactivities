@@ -31,8 +31,7 @@ public class Details
         public async Task<Result<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
         {
             var activity = await _context.Activities
-                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
-                    new { currentUsername = _userAccessor.GetUsername() })
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                 .FirstOrDefaultAsync(activityDto => activityDto.Id == request.Id, cancellationToken);
 
             return Result<ActivityDto>.Success(activity);

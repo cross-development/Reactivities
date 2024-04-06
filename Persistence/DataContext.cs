@@ -40,7 +40,7 @@ public class DataContext : IdentityDbContext<AppUser>
 
         builder.Entity<UserFollowing>(typeBuilder =>
         {
-            typeBuilder.HasKey(key => new { key.ObserverId, key.TargetId });
+            typeBuilder.HasKey(userFollowing => new { userFollowing.ObserverId, userFollowing.TargetId });
 
             typeBuilder.HasOne(userFollowing => userFollowing.Observer)
                 .WithMany(appUser => appUser.Followings)

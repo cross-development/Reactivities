@@ -36,18 +36,18 @@ public class List
             switch (request.Predicate)
             {
                 case "followers":
-                    profiles = await _context.UserFollowings.Where(user => user.Target.UserName == request.Username)
-                        .Select(user => user.Observer)
-                        .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
-                            new { currentUsername = _userAccessor.GetUsername() })
+                    profiles = await _context.UserFollowings
+                        .Where(userFollowing => userFollowing.Target.UserName == request.Username)
+                        .Select(userFollowing => userFollowing.Observer)
+                        .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                         .ToListAsync(cancellationToken);
                     break;
 
                 case "following":
-                    profiles = await _context.UserFollowings.Where(user => user.Observer.UserName == request.Username)
-                        .Select(user => user.Target)
-                        .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider,
-                            new { currentUsername = _userAccessor.GetUsername() })
+                    profiles = await _context.UserFollowings
+                        .Where(x => x.Observer.UserName == request.Username)
+                        .Select(u => u.Target)
+                        .ProjectTo<Profiles.Profile>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                         .ToListAsync(cancellationToken);
                     break;
             }

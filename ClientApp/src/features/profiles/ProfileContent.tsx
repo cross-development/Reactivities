@@ -24,7 +24,7 @@ const ProfileContent: FC<Props> = observer(({ profile }) => {
 
   return (
     <Tab
-      menu={{ flued: true, vertical: true }}
+      menu={{ fluid: true, vertical: true }}
       menuPosition="right"
       panes={panes}
       onTabChange={(_, data) => profileStore.setActiveTab(data.activeIndex as number)}

@@ -28,8 +28,7 @@ public class List
         public async Task<Result<List<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
             var activities = await _context.Activities
-                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
-                    new { currentUsername = _userAccessor.GetUsername() })
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                 .ToListAsync(cancellationToken);
 
             return Result<List<ActivityDto>>.Success(activities);
