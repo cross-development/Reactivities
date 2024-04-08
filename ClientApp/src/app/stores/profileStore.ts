@@ -130,6 +130,28 @@ class ProfileStore {
     }
   };
 
+  public updateProfile = async (profile: Partial<IProfile>): Promise<void> => {
+    this.loading = true;
+
+    try {
+      await agent.Profile.updateProfile(profile);
+
+      runInAction(() => {
+        if (profile.displayName && profile.displayName !== store.userStore.user?.displayName) {
+          store.userStore.setDisplayName(profile.displayName);
+        }
+
+        this.profile = { ...this.profile, ...(profile as IProfile) };
+      });
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      runInAction(() => {
+        this.loading = false;
+      });
+    }
+  };
+
   public updateFollowing = async (username: string, following: boolean): Promise<void> => {
     this.loading = true;
 

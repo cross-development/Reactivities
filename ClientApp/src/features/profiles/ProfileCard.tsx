@@ -4,6 +4,7 @@ import { Card, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { Profile } from '../../app/models/profile';
+import truncate from '../../app/common/helpers/truncate';
 import FollowButton from './FollowButton';
 
 interface Props {
@@ -20,7 +21,7 @@ const ProfileCard: FC<Props> = observer(({ profile }) => (
     <Card.Content>
       <Card.Header>{profile.displayName}</Card.Header>
 
-      <Card.Description>Bio goes here</Card.Description>
+      <Card.Description>{truncate(profile.bio)}</Card.Description>
     </Card.Content>
 
     <Card.Content extra>

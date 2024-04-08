@@ -79,6 +79,12 @@ class UserStore {
       this.user.image = image;
     }
   };
+
+  public setDisplayName = (name: string): void => {
+    if (this.user) {
+      this.user.displayName = name;
+    }
+  };
 }
 
 export default UserStore;

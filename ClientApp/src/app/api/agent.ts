@@ -50,6 +50,7 @@ const Profile = {
   },
   setMainPhoto: (id: string) => req.post(`/photos/${id}/set-main`, {}),
   deletePhoto: (id: string) => req.delete(`/photos/${id}`),
+  updateProfile: (profile: Partial<IProfile>) => req.put('/profiles', profile),
   updateFollowing: (username: string) => req.post(`/follow/${username}`, {}),
   listFollowings: (username: string, predicate: string) =>
     req.get<IProfile[]>(`/follow/${username}?predicate=${predicate}`),
