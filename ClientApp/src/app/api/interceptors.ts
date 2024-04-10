@@ -3,11 +3,20 @@ import { toast } from 'react-toastify';
 
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
+import { PaginatedResult } from '../models/Pagination';
 
 const sleep = (delay: number): Promise<void> => new Promise(resolve => setTimeout(resolve, delay));
 
 export const responseFulfilledInterceptor = async (response: AxiosResponse<unknown, unknown>) => {
   await sleep(1000);
+
+  const pagination = response.headers['pagination'];
+
+  if (pagination) {
+    response.data = new PaginatedResult(response.data, JSON.parse(pagination));
+
+    return response as AxiosResponse<PaginatedResult<unknown>>;
+  }
 
   return response;
 };

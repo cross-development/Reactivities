@@ -8,6 +8,7 @@ import {
 import { IPhoto, IProfile } from '../models/profile';
 import { User, UserFormValues } from '../models/user';
 import { IActivity, ActivityFormValues } from '../models/activity';
+import { PaginatedResult } from '../models/Pagination';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
@@ -24,7 +25,7 @@ const req = {
 };
 
 const Activities = {
-  list: () => req.get<IActivity[]>('/activities'),
+  list: () => req.get<PaginatedResult<IActivity[]>>('/activities'),
   details: (id: string) => req.get<IActivity>(`/activities/${id}`),
   create: (activity: ActivityFormValues) => req.post<void>('/activities', activity),
   update: (activity: ActivityFormValues) => req.put<void>(`/activities/${activity.id}`, activity),
