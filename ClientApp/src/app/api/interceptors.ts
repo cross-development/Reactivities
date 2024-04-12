@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
-import { PaginatedResult } from '../models/Pagination';
+import { PaginatedResult } from '../models/pagination';
 
 const sleep = (delay: number): Promise<void> => new Promise(resolve => setTimeout(resolve, delay));
 

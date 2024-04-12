@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   requestFulfilledInterceptor,
@@ -8,7 +8,7 @@ import {
 import { IPhoto, IProfile } from '../models/profile';
 import { User, UserFormValues } from '../models/user';
 import { IActivity, ActivityFormValues } from '../models/activity';
-import { PaginatedResult } from '../models/Pagination';
+import { PaginatedResult } from '../models/pagination';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
@@ -18,14 +18,16 @@ axios.interceptors.request.use(requestFulfilledInterceptor);
 const responseBody = <T>(response: AxiosResponse<T>): T => response.data;
 
 const req = {
-  get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+  get: <T>(url: string, config?: AxiosRequestConfig) =>
+    axios.get<T>(url, config).then(responseBody),
   post: <T>(url: string, body: object) => axios.post<T>(url, body).then(responseBody),
   put: <T>(url: string, body: object) => axios.put<T>(url, body).then(responseBody),
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
 const Activities = {
-  list: () => req.get<PaginatedResult<IActivity[]>>('/activities'),
+  list: (params: URLSearchParams) =>
+    req.get<PaginatedResult<IActivity[]>>('/activities', { params }),
   details: (id: string) => req.get<IActivity>(`/activities/${id}`),
   create: (activity: ActivityFormValues) => req.post<void>('/activities', activity),
   update: (activity: ActivityFormValues) => req.put<void>(`/activities/${activity.id}`, activity),

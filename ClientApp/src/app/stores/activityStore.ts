@@ -5,7 +5,7 @@ import agent from '../api/agent';
 import { store } from './store';
 import { Activity, ActivityFormValues } from '../models/activity';
 import { Profile } from '../models/profile';
-import { Pagination } from '../models/Pagination';
+import { Pagination, PagingParams } from '../models/pagination';
 
 class ActivityStore {
   public activityRegistry = new Map<string, Activity>();
@@ -14,6 +14,7 @@ class ActivityStore {
   public isLoading = false;
   public isInitialLoading = false;
   public pagination: Pagination | null = null;
+  public pagingParams: PagingParams = new PagingParams();
 
   constructor() {
     makeAutoObservable(this);
@@ -36,11 +37,24 @@ class ActivityStore {
     );
   }
 
+  get axiosParams(): URLSearchParams {
+    const params = new URLSearchParams();
+
+    params.append('pageNumber', this.pagingParams.pageNumber.toString());
+    params.append('pageSize', this.pagingParams.pageSize.toString());
+
+    return params;
+  }
+
+  public setPagingParams = (pagingParams: PagingParams): void => {
+    this.pagingParams = pagingParams;
+  };
+
   public loadActivities = async (): Promise<void> => {
     this.isInitialLoading = true;
 
     try {
-      const result = await agent.Activities.list();
+      const result = await agent.Activities.list(this.axiosParams);
 
       result.data.forEach(this.setActivity);
 
