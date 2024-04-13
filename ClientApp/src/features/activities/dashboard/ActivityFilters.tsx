@@ -1,31 +1,55 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { Header, Menu } from 'semantic-ui-react';
 import Calendar from 'react-calendar';
+import { observer } from 'mobx-react-lite';
 
-const ActivityFilters: FC = memo(() => (
-  <Menu
-    vertical
-    size="large"
-    style={{ width: '100%', marginTop: 25 }}
-  >
-    <Header
-      attached
-      icon="filter"
-      color="teal"
-      content="Filters"
-    />
+import { useStore } from '../../../app/stores/store';
 
-    <Menu.Item content="All Activities" />
+const ActivityFilters: FC = observer(() => {
+  const {
+    activityStore: { predicate, setPredicate },
+  } = useStore();
 
-    <Menu.Item content="I'm going" />
+  return (
+    <Menu
+      vertical
+      size="large"
+      style={{ width: '100%', marginTop: 25 }}
+    >
+      <Header
+        attached
+        icon="filter"
+        color="teal"
+        content="Filters"
+      />
 
-    <Menu.Item content="I'm hosting" />
+      <Menu.Item
+        content="All Activities"
+        active={predicate.has('all')}
+        onClick={() => setPredicate('all', 'true')}
+      />
 
-    <Header />
+      <Menu.Item
+        content="I'm going"
+        active={predicate.has('isGoing')}
+        onClick={() => setPredicate('isGoing', 'true')}
+      />
 
-    <Calendar />
-  </Menu>
-));
+      <Menu.Item
+        content="I'm hosting"
+        active={predicate.has('isHost')}
+        onClick={() => setPredicate('isHost', 'true')}
+      />
+
+      <Header />
+
+      <Calendar
+        value={predicate.get('startDate') || new Date()}
+        onChange={date => setPredicate('startDate', date as Date)}
+      />
+    </Menu>
+  );
+});
 
 ActivityFilters.displayName = 'ActivityFilters';
 

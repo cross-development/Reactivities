@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { format } from 'date-fns';
 
 import agent from '../api/agent';
@@ -15,9 +15,19 @@ class ActivityStore {
   public isInitialLoading = false;
   public pagination: Pagination | null = null;
   public pagingParams: PagingParams = new PagingParams();
+  public predicate = new Map().set('all', true);
 
   constructor() {
     makeAutoObservable(this);
+
+    reaction(
+      () => this.predicate.keys(),
+      () => {
+        this.pagingParams = new PagingParams();
+        this.activityRegistry.clear();
+        this.loadActivities();
+      },
+    );
   }
 
   get activitiesByDate(): Activity[] {
@@ -43,8 +53,48 @@ class ActivityStore {
     params.append('pageNumber', this.pagingParams.pageNumber.toString());
     params.append('pageSize', this.pagingParams.pageSize.toString());
 
+    this.predicate.forEach((value, key) => {
+      if (key === 'startDate') {
+        params.append(key, (value as Date).toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
+
     return params;
   }
+
+  public setPredicate = (predicate: string, value: string | Date): void => {
+    const resetPredicate = (): void => {
+      this.predicate.forEach((_, key) => {
+        if (key !== 'startDate') {
+          this.predicate.delete(key);
+        }
+      });
+    };
+
+    switch (predicate) {
+      case 'all':
+        resetPredicate();
+        this.predicate.set('all', true);
+        break;
+
+      case 'isGoing':
+        resetPredicate();
+        this.predicate.set('isGoing', true);
+        break;
+
+      case 'isHost':
+        resetPredicate();
+        this.predicate.set('isHost', true);
+        break;
+
+      case 'startDate':
+        this.predicate.delete('startDate');
+        this.predicate.set('startDate', value);
+        break;
+    }
+  };
 
   public setPagingParams = (pagingParams: PagingParams): void => {
     this.pagingParams = pagingParams;
