@@ -6,7 +6,7 @@ import {
   responseRejectedInterceptor,
 } from './interceptors';
 import { IPhoto, IProfile } from '../models/profile';
-import { User, UserFormValues } from '../models/user';
+import { User, UserActivity, UserFormValues } from '../models/user';
 import { IActivity, ActivityFormValues } from '../models/activity';
 import { PaginatedResult } from '../models/pagination';
 
@@ -57,6 +57,8 @@ const Profile = {
   updateFollowing: (username: string) => req.post(`/follow/${username}`, {}),
   listFollowings: (username: string, predicate: string) =>
     req.get<IProfile[]>(`/follow/${username}?predicate=${predicate}`),
+  listActivities: (username: string, predicate: string) =>
+    req.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`),
 };
 
 const agent = {

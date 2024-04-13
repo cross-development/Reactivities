@@ -59,5 +59,18 @@ public class MappingProfiles : Profile
             .ForMember(commentDto => commentDto.Image, configuration =>
                 configuration.MapFrom(comment => comment.Author.Photos.FirstOrDefault(photo =>
                     photo.IsMain).Url));
+
+        CreateMap<ActivityAttendee, Profiles.UserActivityDto>()
+            .ForMember(userActivityDto => userActivityDto.Id, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.Activity.Id))
+            .ForMember(userActivityDto => userActivityDto.Date, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.Activity.Date))
+            .ForMember(userActivityDto => userActivityDto.Title, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.Activity.Title))
+            .ForMember(userActivityDto => userActivityDto.Category, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.Activity.Category))
+            .ForMember(userActivityDto => userActivityDto.HostUsername, configuration =>
+                configuration.MapFrom(activityAttendee => activityAttendee.Activity.Attendees.FirstOrDefault(attendee =>
+                    attendee.IsHost).AppUser.UserName));
     }
 }
