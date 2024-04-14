@@ -10,7 +10,7 @@ import { User, UserActivity, UserFormValues } from '../models/user';
 import { IActivity, ActivityFormValues } from '../models/activity';
 import { PaginatedResult } from '../models/pagination';
 
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 axios.interceptors.response.use(responseFulfilledInterceptor, responseRejectedInterceptor);
 axios.interceptors.request.use(requestFulfilledInterceptor);

@@ -8,7 +8,9 @@ import { PaginatedResult } from '../models/pagination';
 const sleep = (delay: number): Promise<void> => new Promise(resolve => setTimeout(resolve, delay));
 
 export const responseFulfilledInterceptor = async (response: AxiosResponse<unknown, unknown>) => {
-  await sleep(1000);
+  if (import.meta.env.DEV) {
+    await sleep(1000);
+  }
 
   const pagination = response.headers['pagination'];
 
