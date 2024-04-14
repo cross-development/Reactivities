@@ -36,9 +36,9 @@ public class ListActivities
 
             query = request.Predicate switch
             {
-                "past" => query.Where(userActivity => userActivity.Date <= DateTime.Now),
+                "past" => query.Where(userActivity => userActivity.Date <= DateTime.UtcNow),
                 "hosting" => query.Where(userActivity => userActivity.HostUsername == request.Username),
-                _ => query.Where(userActivity => userActivity.Date >= DateTime.Now),
+                _ => query.Where(userActivity => userActivity.Date >= DateTime.UtcNow),
             };
 
             var activities = await query.ToListAsync(cancellationToken);
