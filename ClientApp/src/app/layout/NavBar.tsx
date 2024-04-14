@@ -35,12 +35,6 @@ const NavBar: FC = observer(() => {
           as={NavLink}
         />
 
-        <Menu.Item
-          to="/errors"
-          name="Errors"
-          as={NavLink}
-        />
-
         <Menu.Item>
           <Button
             positive

@@ -1,6 +1,6 @@
 import { FC, useState, MouseEvent } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Card, Grid, Header, Image, Tab } from 'semantic-ui-react';
+import { Button, Card, Grid, Header, Image, TabPane } from 'semantic-ui-react';
 
 import { IPhoto, IProfile } from '../../app/models/profile';
 import { useStore } from '../../app/stores/store';
@@ -33,7 +33,7 @@ const ProfilePhotos: FC<Props> = observer(({ profile }) => {
   };
 
   return (
-    <Tab.Pane>
+    <TabPane>
       <Grid>
         <Grid.Column width={16}>
           <Header
@@ -96,7 +96,7 @@ const ProfilePhotos: FC<Props> = observer(({ profile }) => {
           )}
         </Grid.Column>
       </Grid>
-    </Tab.Pane>
+    </TabPane>
   );
 });
 

@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button, Grid, Header, Tab } from 'semantic-ui-react';
+import { Button, Grid, Header, TabPane } from 'semantic-ui-react';
 
 import { useStore } from '../../app/stores/store';
 import ProfileEditForm from './ProfileEditForm';
@@ -13,7 +13,7 @@ const ProfileAbout: FC = observer(() => {
   } = useStore();
 
   return (
-    <Tab.Pane>
+    <TabPane>
       <Grid>
         <Grid.Column width={16}>
           <Header
@@ -40,7 +40,7 @@ const ProfileAbout: FC = observer(() => {
           )}
         </Grid.Column>
       </Grid>
-    </Tab.Pane>
+    </TabPane>
   );
 });
 

@@ -81,11 +81,6 @@ const ActivityForm: FC = observer(() => {
               placeholder="Title"
             />
 
-            <CustomTextInput
-              name="title"
-              placeholder="Title"
-            />
-
             <CustomTextArea
               rows={3}
               name="description"
