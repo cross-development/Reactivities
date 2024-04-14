@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Container } from 'semantic-ui-react';
 import { ToastContainer } from 'react-toastify';
@@ -29,6 +29,8 @@ const App: FC = observer(() => {
 
   return (
     <>
+      <ScrollRestoration />
+
       <ModalContainer />
 
       <ToastContainer
