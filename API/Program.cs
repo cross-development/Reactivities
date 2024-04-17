@@ -25,6 +25,30 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseXContentTypeOptions();
+app.UseReferrerPolicy(options =>
+{
+    options.NoReferrer();
+});
+app.UseXXssProtection(options =>
+{
+    options.EnabledWithBlockMode();
+});
+app.UseXfo(options =>
+{
+    options.Deny();
+});
+app.UseCsp(options =>
+{
+    options.BlockAllMixedContent();
+    options.FontSources(configuration => configuration.Self().CustomSources("https://fonts.gstatic.com", "data:"));
+    options.FormActions(configuration => configuration.Self());
+    options.StyleSources(configuration => configuration.Self().CustomSources("https://fonts.googleapis.com"));
+    options.ImageSources(configuration => configuration.Self().CustomSources("blob:", "https://res.cloudinary.com"));
+    options.ScriptSources(configuration => configuration.Self());
+    options.FrameAncestors(configuration => configuration.Self());
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
