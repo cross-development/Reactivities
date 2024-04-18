@@ -2,8 +2,8 @@
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using Application.Activities;
-using Application.Core;
 using Application.Interfaces;
+using Application.Core;
 using Infrastructure.Photos;
 using Infrastructure.Security;
 using Persistence;

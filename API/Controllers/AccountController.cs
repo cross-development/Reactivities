@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +11,6 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Produces(MediaTypeNames.Application.Json)]
-[Consumes(MediaTypeNames.Application.Json)]
 public class AccountController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
@@ -27,8 +24,6 @@ public class AccountController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await _userManager.Users
@@ -59,8 +54,6 @@ public class AccountController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("register")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         var isUsernameExist = await _userManager.Users.AnyAsync(user => user.UserName == registerDto.Username);
@@ -106,13 +99,11 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var user = await _userManager.Users
             .Include(user => user.Photos)
             .FirstOrDefaultAsync(user => user.Email == User.FindFirstValue(ClaimTypes.Email));
-
 
         return new UserDto
         {

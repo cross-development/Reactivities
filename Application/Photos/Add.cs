@@ -54,9 +54,9 @@ public class Add
 
             user.Photos.Add(photo);
 
-            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+            var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-            return result ? Result<Photo>.Success(photo) : Result<Photo>.Failure("Problem adding photo");
+            return success ? Result<Photo>.Success(photo) : Result<Photo>.Failure("Problem adding photo");
         }
     }
 }

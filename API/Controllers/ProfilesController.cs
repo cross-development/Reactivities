@@ -1,11 +1,8 @@
-﻿using System.Net.Mime;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Application.Profiles;
 
 namespace API.Controllers;
 
-[Produces(MediaTypeNames.Application.Json)]
-[Consumes(MediaTypeNames.Application.Json)]
 public class ProfilesController : BaseApiController
 {
     [HttpGet("{username}")]

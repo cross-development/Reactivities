@@ -50,14 +50,9 @@ public class Create
 
             _context.Activities.Add(request.Activity);
 
-            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+            var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-            if (!result)
-            {
-                return Result<Unit>.Failure("Failed to create activity");
-            }
-
-            return Result<Unit>.Success(Unit.Value);
+            return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Failed to create activity");
         }
     }
 }

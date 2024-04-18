@@ -10,8 +10,7 @@ public class ExceptionMiddleware
     private readonly ILogger<ExceptionMiddleware> _logger;
     private readonly IHostEnvironment _environment;
 
-    public ExceptionMiddleware(
-        RequestDelegate next,
+    public ExceptionMiddleware(RequestDelegate next,
         ILogger<ExceptionMiddleware> logger,
         IHostEnvironment environment)
     {
@@ -28,7 +27,6 @@ public class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-
             _logger.LogError(ex, ex.Message);
 
             context.Response.ContentType = "application/json";
