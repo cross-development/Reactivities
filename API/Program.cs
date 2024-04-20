@@ -41,11 +41,15 @@ app.UseXfo(options =>
 app.UseCsp(options =>
 {
     options.BlockAllMixedContent();
-    options.FontSources(configuration => configuration.Self().CustomSources("https://fonts.gstatic.com", "data:"));
+    options.FontSources(configuration => configuration.Self()
+        .CustomSources("https://fonts.gstatic.com", "data:"));
     options.FormActions(configuration => configuration.Self());
-    options.StyleSources(configuration => configuration.Self().CustomSources("https://fonts.googleapis.com"));
-    options.ImageSources(configuration => configuration.Self().CustomSources("blob:", "https://res.cloudinary.com"));
-    options.ScriptSources(configuration => configuration.Self());
+    options.StyleSources(configuration => configuration.Self()
+        .CustomSources("https://fonts.googleapis.com", "sha256-DpOoqibK/BsYhobWHnU38Pyzt5SjDZuR/mFsAiVN7kk="));
+    options.ImageSources(configuration => configuration.Self()
+        .CustomSources("blob:", "data:", "https://res.cloudinary.com", "https://scontent-iev1-1.xx.fbcdn.net"));
+    options.ScriptSources(configuration => configuration.Self()
+        .CustomSources("https://connect.facebook.net"));
     options.FrameAncestors(configuration => configuration.Self());
 });
 
