@@ -47,7 +47,7 @@ app.UseCsp(options =>
     options.StyleSources(configuration => configuration.Self()
         .CustomSources("https://fonts.googleapis.com", "sha256-DpOoqibK/BsYhobWHnU38Pyzt5SjDZuR/mFsAiVN7kk="));
     options.ImageSources(configuration => configuration.Self()
-        .CustomSources("blob:", "data:", "https://res.cloudinary.com", "https://scontent-iev1-1.xx.fbcdn.net"));
+        .CustomSources("blob:", "data:", "https://res.cloudinary.com", "https://*.fbcdn.net"));
     options.ScriptSources(configuration => configuration.Self()
         .CustomSources("https://connect.facebook.net"));
     options.FrameAncestors(configuration => configuration.Self());
