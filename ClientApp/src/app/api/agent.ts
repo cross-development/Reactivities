@@ -41,6 +41,7 @@ const Account = {
   register: (user: UserFormValues) => req.post<User>('/account/register', user),
   fbLogin: (accessToken: string) =>
     req.post<User>(`/account/fb-login?accessToken=${accessToken}`, {}),
+  refreshToken: () => req.post<User>('/account/refresh-token', {}),
 };
 
 const Profile = {

@@ -24,7 +24,7 @@ export const responseFulfilledInterceptor = async (response: AxiosResponse<unkno
 };
 
 export const responseRejectedInterceptor = async (error: AxiosError) => {
-  const { data, status, config } = error.response as AxiosResponse;
+  const { data, status, config, headers } = error.response as AxiosResponse;
 
   switch (status) {
     case 400:
@@ -47,7 +47,12 @@ export const responseRejectedInterceptor = async (error: AxiosError) => {
       }
       break;
     case 401:
-      toast.error('unauthorized');
+      if (headers['www-authenticate']?.startWith('Bearer error="invalid_token"')) {
+        store.userStore.logout();
+        toast.error('Session expired - please login again');
+      } else {
+        toast.error('unauthorized');
+      }
       break;
     case 403:
       toast.error('forbidden');
